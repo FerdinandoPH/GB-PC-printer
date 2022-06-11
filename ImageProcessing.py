@@ -1,6 +1,5 @@
 from PIL import Image, ImageOps
 import numpy as np
-
 #https://github.com/mies47/MM-ordered_dithering
 
 bayer8 = [
@@ -15,12 +14,30 @@ bayer8 = [
 
 def clampNumber(num, a, b):
     return min(max(num, a), b)
-
-def process_image(src):
+def add_margin(pil_img, top, right, bottom, left, color):
+    width, height = pil_img.size
+    new_width = width + right + left
+    new_height = height + top + bottom
+    result = Image.new(pil_img.mode, (new_width, new_height), color)
+    result.paste(pil_img, (left, top))
+    return result
+def process_image(src,text=False):
     image = Image.open(src)
     width, height = image.size
     dimensions = (160,144)
-    img = np.array(ImageOps.fit(image, dimensions).convert("L"))
+    if not text:
+        #img = np.array(ImageOps.fit(image, dimensions,centering=(0.0,0.0)).convert("L"))
+        image2=image.resize(dimensions)
+        img = np.array(image2.convert("L"))
+    else:
+        if image.size>=dimensions:
+            image2=image.resize(dimensions)
+            img = np.array(image2.convert("L"))
+        else:
+            image2=Image.new("L",dimensions,255)
+            image2.paste(image,(0,0))
+            img = np.array(image2.convert("L"))
+
     x_max = np.size(img, axis=1)
     y_max = np.size(img, axis=0)
 
