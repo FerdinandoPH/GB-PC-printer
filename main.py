@@ -51,6 +51,7 @@ def ImgFile(root):
     PrintTime()
 def MainMenu(root):
     TkinterClear(root)
+    root.geometry("300x200")
     title=Label(root,text="GB printing",font=("Pokemon GB",20))
     title.pack(pady=5)
     botonforText=Button(root,text="Print text (experimental)",command=lambda:textFile(root))
@@ -61,7 +62,6 @@ def MainMenu(root):
     botonExit.pack(pady=5)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root=Tk()
-root.geometry("300x200")
 root.title("GB printer")
 MainMenu(root)
 root.mainloop()
